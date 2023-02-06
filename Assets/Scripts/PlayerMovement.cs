@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     
     //h: Horizontal
     //v: Vertical
-    private float h, v;
+    float h, v;
 
     public void OnStickChanged(Vector2 stickPos)
     {
@@ -40,7 +40,6 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        OnKeybordChanged();
         if (avatar)
         {
             avatar.SetFloat("Speed", (Speed*(h*h+v*v)));

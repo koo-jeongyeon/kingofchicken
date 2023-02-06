@@ -11,8 +11,10 @@ public class PlayerMovement : MonoBehaviour
     private float lastAttackTime, lastSkillTime, lastDashTime;
 
     public bool attacking = false;
+    
+    public bool running = false;
 
-    public bool dashing = false;
+    public bool skilling = false;
 
     public float Speed;
     // Start is called before the first frame update
@@ -57,4 +59,48 @@ public class PlayerMovement : MonoBehaviour
         }
         
     }
+
+    public void OnRunDown()
+    {
+        running = true;
+        StartCoroutine(StartRun());
+    }
+
+    public void OnRunUp()
+    {
+        avatar.SetBool("Run",false);
+        running = false;
+    }
+
+    IEnumerator StartRun()
+    {
+        if (Time.time - lastSkillTime > 1f)
+        {
+            lastSkillTime = Time.time;
+            while (running)
+            {
+                avatar.SetBool("Run",true);
+                yield return new WaitForSeconds(1f);
+            }
+        }
+
+    }
+    
+    public void OnSkillDown()
+    {
+        if (Time.time - lastSkillTime > 1f)
+        {
+            avatar.SetTrigger("Skill");
+            skilling = true;
+            lastSkillTime = Time.time;
+        };
+    }
+
+    public void OnSkillOn()
+    {
+        skilling = false;
+    }
+    
+    
+    
 }

@@ -8,21 +8,21 @@ public class PlayerMovement : MonoBehaviour
     private Animator avatar;
     private Rigidbody rigidbody;
 
-    private float lastAttackTime, lastSkillTime, lastDashTime;
+    private float lastAttackTime, lastSkillTime, lastRunTime;
 
     public bool attacking = false;
     
     public bool running = false;
 
-    public bool skilling = false;
+    public bool skill = false;
 
-    public float Speed;
+    public float speed;
     // Start is called before the first frame update
     void Start()
     {
         avatar = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody>();
-        Speed = 2f;
+        speed = 2f;
     }
     
     //h: Horizontal
@@ -42,13 +42,14 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        OnKeybordChanged();
         if (avatar)
         {
-            avatar.SetFloat("Speed", (Speed*(h*h+v*v)));
+            avatar.SetFloat("Speed", (speed*(h*h+v*v)));
             if (rigidbody)
             {
                 Vector3 velocity = new Vector3(h, 0, v);
-                velocity *= Speed;
+                velocity *= speed;
                 rigidbody.velocity = velocity;
                 
                 if (h != 0 && v != 0)
@@ -63,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
     public void OnRunDown()
     {
         running = true;
+        speed = 10f;
         StartCoroutine(StartRun());
     }
 
@@ -70,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
     {
         avatar.SetBool("Run",false);
         running = false;
+        speed = 2f;
     }
 
     IEnumerator StartRun()
@@ -91,14 +94,14 @@ public class PlayerMovement : MonoBehaviour
         if (Time.time - lastSkillTime > 1f)
         {
             avatar.SetTrigger("Skill");
-            skilling = true;
+            skill = true;
             lastSkillTime = Time.time;
         };
     }
 
     public void OnSkillOn()
     {
-        skilling = false;
+        skill = false;
     }
     
     
